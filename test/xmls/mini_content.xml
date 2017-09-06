@@ -1,0 +1,9 @@
+<Bookstore>
+  <Book id='1'></Book>
+  <Book id='2'>
+    <ISBN>ISBN_2</ISBN>
+  </Book>
+  <Book id='3'>
+    <ISBN>ISBN_3</ISBN>
+  </Book>
+</Bookstore>

@@ -48,7 +48,7 @@ defmodule XKConvertTest do
   test "Convert from text and after convert_X2K to xml again using namespaces" do
     {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_content())
     xml = XK.convert_K2X(xml, [Book: "n:", ISBN: ""])
-    {xml, content} = TestHelper.normalize(xml, TestHelper.get_content_with_namespaces())
+    {xml, content} = TestHelper.normalize(xml, TestHelper.get_match("content_with_namespaces"))
     assert xml == content
   end
   test "Convert from deep text and after convert_X2K to xml again" do
@@ -56,5 +56,23 @@ defmodule XKConvertTest do
     xml = XK.convert_K2X(xml)
     {xml, content} = TestHelper.normalize(xml, TestHelper.get_deep_content())
     assert xml == content
+  end
+  test "Convert from keymap structure I" do
+    data = [Bookstore: [attrs: [blop: "blup"],
+      value: [Booking: [attrs: [id: "0", class: "terror booking"],
+        value: [International: [attrs: [attr: "I_0"], value: []]]],
+       Booking: [attrs: [id: "1", class: "terror booking"],
+        value: [International: [attrs: [attr: "I_1"],
+          value: [ISBN: [attrs: [type: "international"], value: "ISBN_booking"],
+           Name: [attrs: [], value: "The Booking Letcture"],
+           Author: [attrs: [], value: "Randy Pausch"]]],
+         Other: [attrs: [],
+          value: [Final: [attrs: [], value: [Foo: [attrs: [], value: "BAR"]]]]],
+         Other: [attrs: [], value: "something_2"],
+         Other: [attrs: [], value: "something_3"]]],
+       Booking: [attrs: [id: "2", class: "The_third"],
+        value: [International: [attrs: [attr: "I_2"], value: []],
+         Other: [attrs: [], value: "something other"]]]]]]
+     xml = data |> XK.convert_K2X
   end
 end

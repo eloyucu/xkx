@@ -53,15 +53,22 @@ defmodule XK do
   def get_node_attrs(xml, [head | tail]), do: XKAttributesGetter.get_node_attrs(xml[head], tail, 0)
 
   @doc """
-  getAttributesValue
+  set_node
   """
   def set_node(xml, [head | tail], new_value) do
-    IO.puts ""
-    data = XKNodesSetter.set_node(xml, [head | tail], new_value, 0)
-    # cond do
-    #   data == nil || data[:value] == nil -> xml
-    #   true -> data[:value]
-    # end
-    data
+    XKNodesSetter.set_node(xml, [head | tail], new_value, 0)
+    # xml_ = XKNodesSetter.set_node(xml, [head | tail], new_value, 0)
+    # ["#{head}": [attrs: xml[head][:attrs], value: xml_[head]]]
   end
+  @doc """
+  set_node
+  """
+  def set_node_multiple(xml, [head | tail], new_value), do: XKNodesMultipleSetter.set_node_multiple(xml, [head | tail], new_value, 0)
+  @doc """
+  """
+  def set_node_multiple_all(xml, [head | tail], new_value), do: XKNodesMultipleSetter.set_node_multiple_all(xml, [head | tail], new_value, 0)
+  @doc """
+  create_node
+  """
+  def create_node(xml, [head | tail], new_value), do: XKNodesCreate.create_node(xml, [head | tail], new_value, 0)
 end
