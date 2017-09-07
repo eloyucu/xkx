@@ -1,14 +1,14 @@
 defmodule XKNodesListGetterTest do
   use ExUnit.Case
   doctest XK
-  
+
   test "Get all sons of a node first Element" do
     {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_content())
     val = XK.get_node_list(xml, [:Bookstore])
     assert val ==
     [
       [
-        attrs: [],
+        attrs: [id: "BOOKSTORE"],
         value: [
           Booking: [
             attrs: [id: "0", class: "terror booking"],

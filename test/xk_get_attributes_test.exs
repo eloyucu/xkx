@@ -4,28 +4,28 @@ defmodule XKAttributesGetterTest do
 
   test "Get an Attribute from node" do
     {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_content())
-    val = XK.get_node_attrs(xml, [:Bookstore, :Book, :id])
+    val = XK.get_node_attrs(xml, [:Bookstore, :Book], :id)
     assert val == "1"
   end
   test "Get an Attribute from node (second case)" do
     {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_content())
-    val = XK.get_node_attrs(xml, [:Bookstore, :Book, :ISBN, :type])
+    val = XK.get_node_attrs(xml, [:Bookstore, :Book, :ISBN], :type)
     assert val == "international"
   end
   test "Get an Attribute from node (not the first)" do
     {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_content())
-    val = XK.get_node_attrs(xml, [:Bookstore, :Book, :seller])
+    val = XK.get_node_attrs(xml, [:Bookstore, :Book], :seller)
     assert val == "second"
   end
   test "Get bad Attribute from node" do
     {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_content())
-    val = XK.get_node_attrs(xml, [:Bookstore, :Book, :ids])
+    val = XK.get_node_attrs(xml, [:Bookstore, :Book], :ids)
     assert val == nil
   end
   test "Get the attributes of the deepest node (not the first)" do
     {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_deep_content())
-    type = XK.get_node_attrs(xml, [:Bookstore, :Book, :Author, :Name, :Given, :ISBN, :type])
-    attr = XK.get_node_attrs(xml, [:Bookstore, :Book, :Author, :Name, :Given, :ISBN, :special, :attr])
+    type = XK.get_node_attrs(xml, [:Bookstore, :Book, :Author, :Name, :Given, :ISBN], :type)
+    attr = XK.get_node_attrs(xml, [:Bookstore, :Book, :Author, :Name, :Given, :ISBN, :special], :attr)
     assert type == "EU"
     assert attr ==  "value"
   end

@@ -1,0 +1,9 @@
+<Bookstore id="global">
+    <Book id="1"></Book>
+    <Book id="2">
+        <ISBN>wally</ISBN>
+    </Book>
+    <Book id="3">
+        <ISBN>wally</ISBN>
+    </Book>
+</Bookstore>

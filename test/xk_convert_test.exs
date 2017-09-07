@@ -6,7 +6,7 @@ defmodule XKConvertTest do
   test "Convert from text" do
     xml = XK.convert_X2K(TestHelper.get_content())
     assert xml == {:ok, {:Bookstore,
-      [Bookstore: [attrs: [],
+      [Bookstore: [attrs: [id: "BOOKSTORE"],
         value: [Booking: [attrs: [id: "0", class: "terror booking"],
           value: [ISBN: [attrs: [type: "international"], value: "ISBN_booking"],
            Name: [attrs: [], value: "The Booking Letcture"],

@@ -1,0 +1,25 @@
+<Bookstore id="BOOKSTORE">
+    <Booking id="0" class="terror booking">
+        <ISBN type="international">ISBN_booking</ISBN>
+        <Name>The Booking Letcture</Name>
+        <Author>Randy Pausch</Author>
+    </Booking>
+    <Book id="1" class="terror">
+        <ISBN type="international">ISBN_1</ISBN>
+        <Name>wally</Name>
+        <Author>Randy Pausch</Author>
+    </Book>
+    <Book id="2" class="sci-fic" seller="second">
+        <ISBN type="national">ISBN_2</ISBN>
+        <Name>wally</Name>
+        <Author>Randy Orton</Author>
+        <Unique valid="true">true</Unique>
+    </Book>
+    <Book id="3" class="comedy" seller="best">
+        <ISBN type="EU">
+            <special>ISBN_3</special>
+        </ISBN>
+        <Name>wally</Name>
+        <Author>Mike San Francisco</Author>
+    </Book>
+</Bookstore>

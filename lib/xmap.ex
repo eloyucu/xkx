@@ -49,17 +49,15 @@ defmodule XK do
   @doc """
   getAttributesValue
   """
-  # def get_node_attrs(xml, [head | []]), do: XmapAttributes.get_node_attrs(xml, [head | []], 0)
-  def get_node_attrs(xml, [head | tail]), do: XKAttributesGetter.get_node_attrs(xml[head], tail, 0)
+  # def get_node_attrs(xml, [head | tail], nil), do: node = XKNodesGetter.get_node(xml[head], tail, 0)[:attrs]
+  # def get_node_attrs(xml, [head | tail], attr), do: node = XKNodesGetter.get_node(xml[head], tail, 0)[:attrs][attr]
+  # TODO: move the "attr" as a third parameter in XKAttributesGetter.get_node_attrs and simplify the last function get_node_attrs
+  def get_node_attrs(xml, [head | tail], attr), do: XKAttributesGetter.get_node_attrs(xml[head], tail ++ [attr], 0)
 
   @doc """
   set_node
   """
-  def set_node(xml, [head | tail], new_value) do
-    XKNodesSetter.set_node(xml, [head | tail], new_value, 0)
-    # xml_ = XKNodesSetter.set_node(xml, [head | tail], new_value, 0)
-    # ["#{head}": [attrs: xml[head][:attrs], value: xml_[head]]]
-  end
+  def set_node(xml, [head | tail], new_value), do: XKNodesSetter.set_node(xml, [head | tail], new_value, 0)
   @doc """
   set_node
   """
@@ -71,4 +69,8 @@ defmodule XK do
   create_node
   """
   def create_node(xml, [head | tail], new_value), do: XKNodesCreate.create_node(xml, [head | tail], new_value, 0)
+  @doc """
+  create_node
+  """
+  def set_node_attr(xml, [head | tail], attr, new_value), do: XKAttributesSetter.set_attribute(xml, [head | tail], attr, new_value, 0)
 end

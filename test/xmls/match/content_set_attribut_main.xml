@@ -1,4 +1,4 @@
-<Bookstore id="BOOKSTORE">
+<Bookstore id="wally">
   <Booking id='0' class='terror booking'>
     <ISBN type='international'>ISBN_booking</ISBN>
     <Name>The Booking Letcture</Name>

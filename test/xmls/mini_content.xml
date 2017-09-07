@@ -1,4 +1,4 @@
-<Bookstore>
+<Bookstore id="global">
   <Book id='1'></Book>
   <Book id='2'>
     <ISBN>ISBN_2</ISBN>

@@ -59,7 +59,7 @@ defmodule XKNodesSetter do
     cond do
       xml |> is_bitstring -> []
       xml == nil || index>length(xml) || Enum.at(xml, index)==nil -> []
-      xml[head] == nil -> []
+    #   xml[head] == nil -> []
       true ->
         {head_, xml_} = xml |> Enum.at(index)
         cond do

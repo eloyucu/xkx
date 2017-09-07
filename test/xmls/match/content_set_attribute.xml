@@ -5,7 +5,7 @@
     <Author>Randy Pausch</Author>
   </Booking>
   <Book id='1' class='terror'>
-    <ISBN type='international'>ISBN_1</ISBN>
+    <ISBN type='wally'>ISBN_1</ISBN>
     <Name>The Last Letcture</Name>
     <Author>Randy Pausch</Author>
   </Book>

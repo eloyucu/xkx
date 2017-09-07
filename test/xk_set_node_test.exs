@@ -50,21 +50,27 @@ defmodule XKNodesSetterTest do
     assert xml == content
   end
   test "Set a node all ocurrences in all paths" do
-    # {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_mini_content())
-    # val = XK.set_node_multiple_all(xml, [:Bookstore, :Book, :ISBN], "wally")
-    # IO.inspect val
-    # assert val == [Bookstore: [attrs: [blop: "blup"],
-    #   value: [Booking: [attrs: [id: "0", class: "terror booking"],
-    #     value: [International: [attrs: [attr: "I_0"], value: []]]],
-    #    Booking: [attrs: [blop: "blup"],
-    #     value: [International: [attrs: [attr: "I_1"],
-    #       value: [ISBN: [attrs: [type: "international"], value: "ISBN_booking"],
-    #        Name: [attrs: [], value: "The Booking Letcture"],
-    #        Author: [attrs: [], value: "Randy Pausch"]]],
-    #      Other: [attrs: [], value: "wally"], Other: [attrs: [], value: "wally"],
-    #      Other: [attrs: [], value: "wally"]]],
-    #    Booking: [attrs: [id: "2", class: "The_third"],
-    #     value: [International: [attrs: [attr: "I_2"], value: []],
-    #      Other: [attrs: [], value: "wally"]]]]]]
+    {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_content())
+    {xml, content} =
+      XK.set_node_multiple_all(xml, [:Bookstore, :Book, :Name], "wally")
+      |> XK.convert_K2X
+      |> TestHelper.normalize(TestHelper.get_match("content_set_all_ocu_all_path"))
+    assert xml == content
+  end
+  test "Set a node all ocurrences in all paths (mini)" do
+    {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_mini_content())
+    {xml, content} =
+      XK.set_node_multiple_all(xml, [:Bookstore, :Book, :ISBN], "wally")
+      |> XK.convert_K2X
+      |> TestHelper.normalize(TestHelper.get_match("content_set_all_ocu_all_path_mini"))
+    assert xml == content
+  end
+  test "Set a node all ocurrences in all paths (deeper)" do
+    {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_deep_content())
+    {xml, content} =
+      XK.set_node_multiple_all(xml, [:Bookstore, :Book, :Author, :Name, :Given, :ISBN, :special], "wally")
+      |> XK.convert_K2X
+      |> TestHelper.normalize(TestHelper.get_match("content_set_all_ocu_all_path_deep"))
+    assert xml == content
   end
 end
