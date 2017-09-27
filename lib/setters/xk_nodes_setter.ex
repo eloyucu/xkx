@@ -1,8 +1,8 @@
 defmodule XKNodesSetter do
-  def set_node(nil, _, _, _), do: []
-  def set_node([], _, _, _), do: []
-  def set_node(xml, [], _, _), do: xml
-  def set_node(xml, [head | []], _, _) when is_bitstring(xml), do: xml
+  # def set_node(nil, _, _, _), do: []
+  # def set_node([], _, _, _), do: []
+  # def set_node(xml, [], _, _), do: xml
+  # def set_node(xml, [head | []], _, _) when is_bitstring(xml), do: xml
   def set_node(xml, [head | []], new_value, index) do
     data = xml |> filter_xml(head, index)
     preserve = Keyword.get_values(data, head)

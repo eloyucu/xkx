@@ -1,0 +1,19 @@
+<Bookstore blop='blup'>
+  <Booking id='0' class='terror booking'>
+    <International attr='I_0'></International>
+  </Booking>
+  <Booking id='1' class='terror booking'>
+    <International attr='I_1'>
+      <ISBN type='international'>ISBN_booking</ISBN>
+      <Name>The Booking Letcture</Name>
+      <Author>Randy Pausch</Author>
+    </International>
+    <Other class="wally">something</Other>
+    <Other class="wally">something_2</Other>
+    <Other class="wally">something_3</Other>
+  </Booking>
+  <Booking id='2' class='The_third'>
+    <International attr='I_2'></International>
+    <Other>something other</Other>
+  </Booking>
+</Bookstore>

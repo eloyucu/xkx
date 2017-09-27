@@ -70,7 +70,13 @@ defmodule XK do
   """
   def create_node(xml, [head | tail], new_value), do: XKNodesCreate.create_node(xml, [head | tail], new_value, 0)
   @doc """
-  create_node
+  set_node_attr
   """
-  def set_node_attr(xml, [head | tail], attr, new_value), do: XKAttributesSetter.set_attribute(xml, [head | tail], attr, new_value, 0)
+  def set_node_attr(xml, nodes, attr, new_value), do: XKAttributesSetter.set_attribute(xml, nodes, attr, new_value, 0)
+  def set_node_attr(xml, nodes, new_value), do: XKAttributesSetter.set_attribute(xml, nodes, nil, new_value, 0)
+  @doc """
+  set_node_attr
+  """
+  def set_attribute_multiple(xml, nodes, attr, new_value), do: XKAttributesMultipleSetter.set_attribute_multiple(xml, nodes, attr, new_value, 0)
+  def set_attribute_multiple(xml, nodes, new_value), do: XKAttributesMultipleSetter.set_attribute_multiple(xml, nodes, nil, new_value, 0)
 end

@@ -1,9 +1,9 @@
 defmodule XKNodesMultipleSetter do
-  def set_node_multiple(nil, _, _, _), do: []
-  def set_node_multiple(nil, _, _, _), do: []
-  def set_node_multiple([], _, _, _), do: []
-  def set_node_multiple(xml, [], _, _), do: xml
-  def set_node_multiple(xml, [head | []], _, _) when is_bitstring(xml), do: xml
+  # def set_node_multiple(nil, _, _, _), do: []
+  # def set_node_multiple(nil, _, _, _), do: []
+  # def set_node_multiple([], _, _, _), do: []
+  # def set_node_multiple(xml, [], _, _), do: xml
+  # def set_node_multiple(xml, [head | []], _, _) when is_bitstring(xml), do: xml
   def set_node_multiple(xml, [head | []], new_value, index) do
     data = xml |> filter_xml(head, index)
     cond do

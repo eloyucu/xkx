@@ -2,28 +2,100 @@ defmodule XKAttributesSetter do
   # def set_attribute(nil, _, _, _, _), do: []
   # def set_attribute([], _, _, _, _), do: []
   # def set_attribute(xml, [], _, _, _), do: xml
-  # def set_attribute(xml, [head | []], _, _, _) when is_bitstring(xml), do: xml
-  def set_attribute({k, v, acc}, {attr_to_match, new_value}, {true, x}) when not is_nil(x) do
-    {_, v} = v |> Keyword.get_and_update!(:attrs, fn(x)->
-      {nil, Keyword.merge(v[:attrs], ["#{attr_to_match}": new_value])}
-    end)
-    acc ++ ["#{k}": v]
-  end
-  def set_attribute({k, v, acc}, _, _), do: acc ++ ["#{k}": v]
+  # # def set_attribute(xml, [head | []], _, _, _) when is_bitstring(xml), do: xml
+  # def set_attribute({k, v, acc}, {nil, new_value}, {true, x}) when is_nil(x) and is_list(new_value)  do
+  #   {_, v} = v |> Keyword.get_and_update!(:attrs, fn(x)->
+  #     {nil, new_value}
+  #   end)
+  #   acc ++ ["#{k}": v]
+  # end
+  # def set_attribute({k, v, acc}, {attr_to_match, new_value}, {true, x}) when not is_nil(x) and not is_nil(attr_to_match) do
+  #   {_, v} = v |> Keyword.get_and_update!(:attrs, fn(x)->
+  #     {nil, Keyword.merge(v[:attrs], ["#{attr_to_match}": new_value])}
+  #   end)
+  #   acc ++ ["#{k}": v]
+  # end
+  # def set_attribute({k, v, acc}, values, x), do: acc ++ ["#{k}": v]
+  def set_attribute(x, attr_to_match, new_value) when is_list(new_value), do: [attrs: new_value, value: x[:value]]
+  def set_attribute(x, attr_to_match, new_value) do
+    # IO.puts "set_attribute attr_to_match, new_value"
+    # IO.puts "attr_to_match: "
+    # IO.inspect attr_to_match
+    # IO.puts "new_value: "
+    # IO.inspect new_value
+    # IO.puts "X VALUE BEFORE"
+    # IO.inspect x
+    # IO.puts ""
 
-  def set_attribute(xml, [head | []], attr_to_match, new_value, index) do
-    xml_ = xml[:value] |> basic_filter_xml(xml) |> Enum.reduce([], fn({k, v}, acc) ->
-      set_attribute({k, v, acc}, {attr_to_match, new_value}, {k==head, v[:attrs][attr_to_match]})
+    x_ = x[:attrs]
+    x_ = Keyword.update(x_, attr_to_match, new_value, fn(y) ->
+      new_value
     end)
-    filter_return(xml[:attrs], xml_)
+    # IO.puts "set_attribute attr_to_match, new_value"
+    # IO.puts "X VALUE"
+    [attrs: x_, value: x[:value]] # |> IO.inspect
+  end
+  def set_attribute(xml, [head | []], attr_to_match, new_value, index) when not is_nil(attr_to_match) do
+    data = xml |> filter_xml(head, index)
+    xml_ = basic_filter_xml(xml[head], xml)
+    preserve = Keyword.get_values(data, head) # |> IO.inspect
+    try do
+      {x, node} = Keyword.get_and_update!(data, head, fn(x) ->
+        {x, set_attribute(x, attr_to_match, new_value)}
+      end)
+      cond do
+        xml[:attrs] != nil ->
+          {_, node_} = xml_[:value] |> Enum.reduce({0, []}, fn({k, v}, acc) ->
+            {i, acc} = acc
+            data_ =
+            cond do
+              ["#{k}": v] != data -> {i+1, acc ++ ["#{k}": v]}
+              true -> {i+1, acc ++ node}
+            end
+          end)
+          [attrs: xml[:attrs], value: node_] #|> IO.inspect
+        true -> node
+      end
+    rescue
+      e in KeyError ->
+        cond do
+          data == [] && is_bitstring(xml[:value]) -> nil
+          true -> xml
+        end
+      e in FunctionClauseError -> xml
+      true -> xml
+    end
+  end
+  def set_attribute(xml, [head | []], attr_to_match, new_value, index) do
+    data = xml |> filter_xml(head, index)
+    preserve = Keyword.get_values(data, head)
+    try do
+      {x, node} = Keyword.get_and_update!(data, head, fn(x) ->
+        {x, set_attribute(x, attr_to_match, new_value)}
+      end)
+      node_ = preserve |> Enum.reduce([], fn(x, acc) ->
+        cond do
+          x != data[head] -> acc ++ ["#{head}": x]
+          true -> acc
+        end
+      end)
+      [attrs: xml[:attrs], value: node ++ node_] # |> IO.inspect
+    rescue
+      e in KeyError ->
+        cond do
+          data == [] && is_bitstring(xml[:value]) -> nil
+          true -> xml
+        end
+      e in FunctionClauseError -> xml
+      true -> xml
+    end
   end
   def set_attribute(xml, [head | tail], attr_to_match, new_value, index) do
     data = xml |> filter_xml(head, index)
     cond do
       data[head] != nil && data[head] != [] -> # This case is used
         {_, node} = Keyword.get_and_update!(data, head, fn(x) ->
-          new_node = set_attribute(x, tail, new_value, attr_to_match, 0)
-          {x, new_node}
+          {x, set_attribute(x, tail, attr_to_match, new_value, 0)}
         end)
         cond do
           node[head] == nil || (data == node && node[head] != nil) -> set_attribute(xml, [head | tail], attr_to_match, new_value, index+1) # This case is used
@@ -43,19 +115,17 @@ defmodule XKAttributesSetter do
       true -> xml # This case is used
     end
   end
+
   defp filter_xml(xml, head, index) do
     xml = basic_filter_xml(xml[:value], xml)
-    # cond do
-    #   xml |> is_bitstring -> []
-    #   xml == nil || index>length(xml) || Enum.at(xml, index)==nil -> []
-    #   xml[head] == nil -> []
-    #   true ->
-        {head_, xml_} = xml |> Enum.at(index)
-        cond do
-          head_ == head -> ["#{head}": xml_]
-          true -> xml
-        end
-    # end
+      xml_ = xml |> Enum.at(index)
+      cond do
+        xml_ == nil -> xml
+        elem(xml_, 0) == head ->
+          {head_, xml_} = xml_
+          ["#{head}": xml_]
+        true -> filter_xml(xml, head, index+1)
+      end
   end
   defp basic_filter_xml(nil, xml), do: xml
   defp basic_filter_xml(xml, _), do: xml
