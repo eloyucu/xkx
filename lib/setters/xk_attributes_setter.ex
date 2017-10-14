@@ -1,41 +1,15 @@
 defmodule XKAttributesSetter do
-  # def set_attribute(nil, _, _, _, _), do: []
-  # def set_attribute([], _, _, _, _), do: []
-  # def set_attribute(xml, [], _, _, _), do: xml
-  # # def set_attribute(xml, [head | []], _, _, _) when is_bitstring(xml), do: xml
-  # def set_attribute({k, v, acc}, {nil, new_value}, {true, x}) when is_nil(x) and is_list(new_value)  do
-  #   {_, v} = v |> Keyword.get_and_update!(:attrs, fn(x)->
-  #     {nil, new_value}
-  #   end)
-  #   acc ++ ["#{k}": v]
-  # end
-  # def set_attribute({k, v, acc}, {attr_to_match, new_value}, {true, x}) when not is_nil(x) and not is_nil(attr_to_match) do
-  #   {_, v} = v |> Keyword.get_and_update!(:attrs, fn(x)->
-  #     {nil, Keyword.merge(v[:attrs], ["#{attr_to_match}": new_value])}
-  #   end)
-  #   acc ++ ["#{k}": v]
-  # end
-  # def set_attribute({k, v, acc}, values, x), do: acc ++ ["#{k}": v]
-  def set_attribute(x, attr_to_match, new_value) when is_list(new_value), do: [attrs: new_value, value: x[:value]]
+  def set_attribute(x, attr_to_match, new_value) when is_list(new_value) do
+    [attrs: new_value, value: x[:value]]
+  end
   def set_attribute(x, attr_to_match, new_value) do
-    # IO.puts "set_attribute attr_to_match, new_value"
-    # IO.puts "attr_to_match: "
-    # IO.inspect attr_to_match
-    # IO.puts "new_value: "
-    # IO.inspect new_value
-    # IO.puts "X VALUE BEFORE"
-    # IO.inspect x
-    # IO.puts ""
-
     x_ = x[:attrs]
     x_ = Keyword.update(x_, attr_to_match, new_value, fn(y) ->
       new_value
     end)
-    # IO.puts "set_attribute attr_to_match, new_value"
-    # IO.puts "X VALUE"
     [attrs: x_, value: x[:value]] # |> IO.inspect
   end
-  def set_attribute(xml, [head | []], attr_to_match, new_value, index) when not is_nil(attr_to_match) do
+  def set_attribute(xml, [head | []], attr_to_match, new_value, index)  do
     data = xml |> filter_xml(head, index)
     xml_ = basic_filter_xml(xml[head], xml)
     preserve = Keyword.get_values(data, head) # |> IO.inspect
@@ -66,30 +40,33 @@ defmodule XKAttributesSetter do
       true -> xml
     end
   end
-  def set_attribute(xml, [head | []], attr_to_match, new_value, index) do
-    data = xml |> filter_xml(head, index)
-    preserve = Keyword.get_values(data, head)
-    try do
-      {x, node} = Keyword.get_and_update!(data, head, fn(x) ->
-        {x, set_attribute(x, attr_to_match, new_value)}
-      end)
-      node_ = preserve |> Enum.reduce([], fn(x, acc) ->
-        cond do
-          x != data[head] -> acc ++ ["#{head}": x]
-          true -> acc
-        end
-      end)
-      [attrs: xml[:attrs], value: node ++ node_] # |> IO.inspect
-    rescue
-      e in KeyError ->
-        cond do
-          data == [] && is_bitstring(xml[:value]) -> nil
-          true -> xml
-        end
-      e in FunctionClauseError -> xml
-      true -> xml
-    end
-  end
+  # def set_attribute(xml, [head | []], attr_to_match, new_value, index) do
+  #   IO.puts ""
+  #   IO.puts "set_attribute FINAL head: #{head} index: #{index}"
+  #   data = xml |> filter_xml(head, index)
+  #   preserve = Keyword.get_values(data, head)
+  #   try do
+  #     {x, node} = Keyword.get_and_update!(data, head, fn(x) ->
+  #       n = set_attribute(x, attr_to_match, new_value) |> IO.inspect
+  #       {x, n}
+  #     end)
+  #     node_ = preserve |> Enum.reduce([], fn(x, acc) ->
+  #       cond do
+  #         x != data[head] -> acc ++ ["#{head}": x]
+  #         true -> acc
+  #       end
+  #     end)
+  #     [attrs: xml[:attrs], value: node ++ node_] # |> IO.inspect
+  #   rescue
+  #     e in KeyError ->
+  #       cond do
+  #         data == [] && is_bitstring(xml[:value]) -> nil
+  #         true -> xml
+  #       end
+  #     e in FunctionClauseError -> xml
+  #     true -> xml
+  #   end
+  # end
   def set_attribute(xml, [head | tail], attr_to_match, new_value, index) do
     data = xml |> filter_xml(head, index)
     cond do
@@ -98,6 +75,7 @@ defmodule XKAttributesSetter do
           {x, set_attribute(x, tail, attr_to_match, new_value, 0)}
         end)
         cond do
+          (node[head] == nil || (data == node && node[head] != nil)) && index>length(basic_filter_xml(xml, xml[:value])) -> xml # This case is used
           node[head] == nil || (data == node && node[head] != nil) -> set_attribute(xml, [head | tail], attr_to_match, new_value, index+1) # This case is used
           true -> # This case is used
             attrs = get_attrs(xml[head], xml[:attrs])

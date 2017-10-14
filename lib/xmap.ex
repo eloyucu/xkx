@@ -72,11 +72,23 @@ defmodule XK do
   @doc """
   set_node_attr
   """
-  def set_node_attr(xml, nodes, attr, new_value), do: XKAttributesSetter.set_attribute(xml, nodes, attr, new_value, 0)
-  def set_node_attr(xml, nodes, new_value), do: XKAttributesSetter.set_attribute(xml, nodes, nil, new_value, 0)
+  def set_node_attr(xml, nodes, attr, new_value), do: XKAttributesSetter.set_attribute(xml, nodes, attr, new_value, 0) |> filter_output
+  def set_node_attr(xml, nodes, new_value), do: XKAttributesSetter.set_attribute(xml, nodes, nil, new_value, 0) |> filter_output
   @doc """
-  set_node_attr
+  set_node_attr_multiple
   """
-  def set_attribute_multiple(xml, nodes, attr, new_value), do: XKAttributesMultipleSetter.set_attribute_multiple(xml, nodes, attr, new_value, 0)
-  def set_attribute_multiple(xml, nodes, new_value), do: XKAttributesMultipleSetter.set_attribute_multiple(xml, nodes, nil, new_value, 0)
+  def set_attribute_multiple(xml, nodes, attr, new_value), do: XKAttributesMultipleSetter.set_attribute_multiple(xml, nodes, attr, new_value, 0) |> filter_output
+  def set_attribute_multiple(xml, nodes, new_value), do: XKAttributesMultipleSetter.set_attribute_multiple(xml, nodes, nil, new_value, 0) |> filter_output
+  @doc """
+  set_node_attr_multiple_all
+  """
+  def set_attribute_multiple_all(xml, nodes, attr, new_value), do: XKAttributesMultipleSetter.set_attribute_multiple_all(xml, nodes, attr, new_value, 0) |> filter_output
+  def set_attribute_multiple_all(xml, nodes, new_value), do: XKAttributesMultipleSetter.set_attribute_multiple_all(xml, nodes, nil, new_value, 0) |> filter_output
+
+  defp filter_output(data) do
+    cond do
+      data[:value] != nil -> data[:value]
+      true -> data
+    end
+  end
 end
