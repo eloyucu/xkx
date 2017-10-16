@@ -73,4 +73,12 @@ defmodule XKNodesSetterTest do
       |> TestHelper.normalize(TestHelper.get_match("content_set_all_ocu_all_path_deep"))
     assert xml == content
   end
+  test "Set a node all ocurrences in all paths (deeper) II" do
+    {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_short_content())
+    {xml, content} =
+      XK.set_node_multiple_all(xml, [:Bookstore, :Booking, :Other], "wally")
+      |> XK.convert_K2X
+      |> TestHelper.normalize(TestHelper.get_match("short_content_multiply_other_all"))
+    assert xml == content
+  end
 end

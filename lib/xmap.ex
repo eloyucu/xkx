@@ -68,7 +68,7 @@ defmodule XK do
   @doc """
   create_node
   """
-  def create_node(xml, [head | tail], new_value), do: XKNodesCreate.create_node(xml, [head | tail], new_value, 0)
+  # def create_node(xml, [head | tail], new_value), do: XKNodesCreate.create_node(xml, [head | tail], new_value, 0)
   @doc """
   set_node_attr
   """

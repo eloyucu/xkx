@@ -16,8 +16,8 @@ defmodule XKConvertX2K do
       [head] = Keyword.keys(elements)
       {:ok, {head, elements}}
     catch
-      :fatal, :expected_element_start_tag -> {:error, 400, "Empty XML message"}
-      _, _ -> {:error, 400, "Fatal error parsing XML message"}
+      :fatal, :expected_element_start_tag -> {:error, nil, "Empty XML message"}
+      _, _ -> {:error, nil, "Fatal error parsing XML message"}
     end
   end
 
