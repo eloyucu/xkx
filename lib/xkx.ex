@@ -1,6 +1,6 @@
-defmodule XK do
+defmodule XKX do
   @moduledoc """
-  Documentation for XK.
+  Documentation for XKX.
   """
 
   @doc """
