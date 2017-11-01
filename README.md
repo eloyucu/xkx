@@ -164,7 +164,7 @@ or alternatively use:
 The advantage of the second way is that we can set more than one attr with only one invoking to this function:
 `XKX.set_node_attr(xml, [:Bookstore], [id: "wally", foo: "bar", other_attr: "value"])`
 
-### set_attribute_multiple/set_attribute_multiple_all
+### set_attribute_multiple and set_attribute_multiple_all
 These tow functions make the same than _set_node_multiple_ and _set_node_multiple_all_ respectively, but modifying the attributes instead of the nodes.
 ### create_node
 There are 4 ways to interact with this function based on the last two arguments.
@@ -175,9 +175,8 @@ XKX.create_node(data, [:root, :son], [node, node], :after, true)
 XKX.create_node(data, [:root, :son], node, :before, false)
 XKX.create_node(data, [:root, :son], [node, node], :before, true)
 ```
-
-## TODO:
-`set_node_by_dependency`, `set_node_multiple_by_dependency` and `set_node_multiple_all_by_dependency` that will allow set a node with a new value but pasing a keyword and set this new value deppending on the old value. Something like (using the simplest xml on the top of this document):
+### set_node_by_dependency
+This function allows to set a node with a new value but pasing a keyword and set this new value deppending on the old value. Something like (using the simplest xml on the top of this document):
 ```
 {:ok, {_, data}} = XKX.convert_X2K(xml)
 value = XKX.set_node_by_dependency(data, [:father, :foo], [bar: "ok", other: "no", other_one: "neither"])
@@ -190,4 +189,6 @@ And the result will be:
   </foo>
 </father>
 ```
-And the same for the attributes.
+### set_node_multiple_by_dependency and set_node_multiple_by_dependency_all
+Here the differences are similar than the other functinality for set the value of single node and a list of nodes.  
+Please check this test (and its resulting xml) https://github.com/eloyucu/xkx/blob/master/test/xk_set_node_dependency_test.exs
