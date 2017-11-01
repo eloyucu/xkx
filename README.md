@@ -5,6 +5,7 @@ XKX is a xml parser that transform a xml into a keyword elixir structure (using 
 XKX provides too a list of functions to handle or modify this parsed xml. Using XKX you have an easy way to get or set the value of any node or attribute.
 
 ## How to use
+### convert_X2K and convert_K2X
 To parse the xml is as easier as to use the `XKX.convert_X2K(xml)` function. In this way, we can get this result:
 ```
 {:ok, {:father,
@@ -40,14 +41,15 @@ The errors we can obtain are:
 
 For the opposite operation we use `convert_K2X(data)` (data should be a structure similar as the third element of the tuple), and we obtain the xml from the keyword.
 Another important functions are:
-`get_node_value`: to get the value of a node passing as second param the "path" to this node. Example (using the xml above):
+### get_node_value
+To get the value of a node passing as second param the "path" to this node. Example (using the xml above):
 ```
 {:ok, {_, data}} = XKX.convert_X2K(xml)
 value = XKX.get_node_value(data, [:father, :foo])
 ```
 value will be _foo_
-
-`get_node`: the difference between this function and the previous is that this one gets all the structure of the node. Example
+### get_node
+The difference between this function and the previous is that this one gets all the structure of the node. Example
 ```
 {:ok, {_, data}} = XKX.convert_X2K(xml)
 value = XKX.get_node(data, [:father, :foo])
@@ -58,7 +60,8 @@ _[
   value: "bar"
 ]_
 
-`get_node_value_list`: since now we were getting the first value found in the xml that match with the path... but it is obvius that in a xml we can find more than one occurrence of a node "following" a determined path. This function will return a list of values of all nodes found in the param path. Example (using this new xml):
+### get_node_value_list
+So far, we were getting the first value found in the xml that match with the path... but it is obvius that in a xml we can find more than one occurrence of a node "following" a determined path. This function will return a list of values of all nodes found in the param path. Example (using this new xml):
 ```
 <Bookstore id="BOOKSTORE">
   <Booking id='0' class='terror booking'>
@@ -98,8 +101,8 @@ _[
   "ISBN_1"
 ]_
 
-
-`get_node_list`: The difference between this function and the previous is similar at difference between `get_node_value` and `get_node`. Example:
+### get_node_list
+The difference between this function and the previous is similar at difference between `get_node_value` and `get_node`. Example:
 ```
 {:ok, {_, data}} = XKX.convert_X2K(xml)
 value = XKX.get_node_list(data, [:Bookstore, :Book, :ISBN])
@@ -111,14 +114,16 @@ _[
   [attrs: [type: "international"], value: "ISBN_1"]
 ]_
 
-`XKX.get_node_attrs`: With this fuction, we can obtain a determined attribute (indicated by the third param) of a node. Example:
+### get_node_attrs
+With this fuction, we can obtain a determined attribute (indicated by the third param) of a node. Example:
 ```
 {:ok, {_, data}} = XKX.convert_X2K(xml)
 value = val = XKX.get_node_attrs(data, [:Bookstore, :Book], :seller)
 ```
 And the result will be _second_
 
-`set_node`: This function will set the first occurrence of a node with a new value passed as the third argument of the function. Example:
+### set_node
+This function will set the first occurrence of a node with a new value passed as the third argument of the function. Example:
 ```
 {:ok, {_, data}} = XKX.convert_X2K(xml)
 xml =
@@ -127,7 +132,8 @@ xml =
 ```
 You can find the xml result with the modified node here: https://github.com/eloyucu/xkx/blob/master/test/xmls/match/content_set_first_occurrence.xml
 
-`set_node_multiple`: We can have the needed about modify all the ocurrences of a node in a path... but only the first occurrence of the father. Example (using this xml https://github.com/eloyucu/xkx/blob/master/test/xmls/short_content.xml):
+### set_node_multiple
+We can have the needed about modify all the ocurrences of a node in a path... but only the first occurrence of the father. Example (using this xml https://github.com/eloyucu/xkx/blob/master/test/xmls/short_content.xml):
 ```
 {:ok, {_, data}} = XKX.convert_X2K(xml)
 xml =
@@ -137,7 +143,8 @@ xml =
 And the result will be: https://github.com/eloyucu/xkx/blob/master/test/xmls/match/short_content_multiply_other.xml
 
 
-`set_node_multiple_all`: Modifies all ocurrences of a node in the xpath. We are going to use the same xml and xpath than before, in this way, differences between these two similar functions will be easier to see.
+### set_node_multiple_all
+Modifies all ocurrences of a node in the xpath. We are going to use the same xml and xpath than before, in this way, differences between these two similar functions will be easier to see.
 ```
 {:ok, {_, data}} = XKX.convert_X2K(xml)
 xml =
@@ -146,7 +153,8 @@ xml =
 ```
 And the result will be: https://github.com/eloyucu/xkx/blob/master/test/xmls/match/short_content_multiply_other_all.xml.xml
 
-`set_node_attr` Two ways to use this function:
+### set_node_attr
+Two ways to use this function:
 1) set_node_attr(xml, nodes, attr, new_value) -> the third argument is the attribute to change the value, and the fourth is the new value.
 2) set_node_attr(xml, nodes, attrs) -> the third argument is a keyword list that will be setted as attributes for the last element of the path (on nodes param).
 In this way we can use:
@@ -156,7 +164,17 @@ or alternatively use:
 The advantage of the second way is that we can set more than one attr with only one invoking to this function:
 `XKX.set_node_attr(xml, [:Bookstore], [id: "wally", foo: "bar", other_attr: "value"])`
 
-`set_attribute_multiple` and `set_attribute_multiple_all` that make the same than _set_node_multiple_ and _set_node_multiple_all_ respectively, but modifying the attributes instead of the nodes.
+### set_attribute_multiple/set_attribute_multiple_all
+These tow functions make the same than _set_node_multiple_ and _set_node_multiple_all_ respectively, but modifying the attributes instead of the nodes.
+### create_node
+There are 4 ways to interact with this function based on the last two arguments.
+The signature for this function is `create_node(data, path, new_value, order, is_list)` where data, path and new_value are easy know what they do. Order argument indicates to function if the new_value should be _:after_ or _:before_ that the preexisting list of nodes. On the other hand, is_list indicates if the new_value argument is a list of new nodes (_true_) or a simple node (_false_). A list of quick examples about how call this function:
+```
+XKX.create_node(data, [:root, :son], node, :after, false)
+XKX.create_node(data, [:root, :son], [node, node], :after, true)
+XKX.create_node(data, [:root, :son], node, :before, false)
+XKX.create_node(data, [:root, :son], [node, node], :before, true)
+```
 
 ## TODO:
 `set_node_by_dependency`, `set_node_multiple_by_dependency` and `set_node_multiple_all_by_dependency` that will allow set a node with a new value but pasing a keyword and set this new value deppending on the old value. Something like (using the simplest xml on the top of this document):

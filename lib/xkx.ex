@@ -55,7 +55,7 @@ defmodule XKX do
   def get_node_attrs(xml, [head | tail], attr), do: XKAttributesGetter.get_node_attrs(xml[head], tail ++ [attr], 0)
 
   @doc """
-  set_node
+  create_node
   """
   def create_node(xml, [head | tail], new_value, order, is_list), do: XKNodesCreator.create_node(xml, [head | tail], new_value, order, is_list, 0)
 
