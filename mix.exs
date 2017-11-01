@@ -1,4 +1,4 @@
-defmodule XK.Mixfile do
+defmodule XKX.Mixfile do
   use Mix.Project
 
   def project do

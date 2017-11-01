@@ -1,11 +1,11 @@
-# XK
+# XKX
 
 ## Description
 XKX is a xml parser that transform a xml into a keyword elixir structure (using `convert_X2K`), and build a xml from a keyword structure (using `convert_K2X`).
 XKX provides too a list of functions to handle or modify this parsed xml. Using XKX you have an easy way to get or set the value of any node or attribute.
 
 ## How to use
-To parse the xml is as easier as to use the `XK.convert_X2K(xml)` function. In this way, we can get this result:
+To parse the xml is as easier as to use the `XKX.convert_X2K(xml)` function. In this way, we can get this result:
 ```
 {:ok, {:father,
   [
@@ -42,15 +42,15 @@ For the opposite operation we use `convert_K2X(data)` (data should be a structur
 Another important functions are:
 `get_node_value`: to get the value of a node passing as second param the "path" to this node. Example (using the xml above):
 ```
-{:ok, {_, data}} = XK.convert_X2K(xml)
-value = XK.get_node_value(data, [:father, :foo])
+{:ok, {_, data}} = XKX.convert_X2K(xml)
+value = XKX.get_node_value(data, [:father, :foo])
 ```
 value will be _foo_
 
 `get_node`: the difference between this function and the previous is that this one gets all the structure of the node. Example
 ```
-{:ok, {_, data}} = XK.convert_X2K(xml)
-value = XK.get_node(data, [:father, :foo])
+{:ok, {_, data}} = XKX.convert_X2K(xml)
+value = XKX.get_node(data, [:father, :foo])
 ```
 value will:
 _[
@@ -88,8 +88,8 @@ _[
 ```
 The invoking of the function:
 ```
-{:ok, {_, data}} = XK.convert_X2K(xml)
-value = XK.get_node_value_list(data, [:Bookstore, :Book, :ISBN])
+{:ok, {_, data}} = XKX.convert_X2K(xml)
+value = XKX.get_node_value_list(data, [:Bookstore, :Book, :ISBN])
 ```
 And the result will be:
 _[
@@ -101,8 +101,8 @@ _[
 
 `get_node_list`: The difference between this function and the previous is similar at difference between `get_node_value` and `get_node`. Example:
 ```
-{:ok, {_, data}} = XK.convert_X2K(xml)
-value = XK.get_node_list(data, [:Bookstore, :Book, :ISBN])
+{:ok, {_, data}} = XKX.convert_X2K(xml)
+value = XKX.get_node_list(data, [:Bookstore, :Book, :ISBN])
 ```
 The result is:
 _[
@@ -111,38 +111,38 @@ _[
   [attrs: [type: "international"], value: "ISBN_1"]
 ]_
 
-`XK.get_node_attrs`: With this fuction, we can obtain a determined attribute (indicated by the third param) of a node. Example:
+`XKX.get_node_attrs`: With this fuction, we can obtain a determined attribute (indicated by the third param) of a node. Example:
 ```
-{:ok, {_, data}} = XK.convert_X2K(xml)
-value = val = XK.get_node_attrs(data, [:Bookstore, :Book], :seller)
+{:ok, {_, data}} = XKX.convert_X2K(xml)
+value = val = XKX.get_node_attrs(data, [:Bookstore, :Book], :seller)
 ```
 And the result will be _second_
 
 `set_node`: This function will set the first occurrence of a node with a new value passed as the third argument of the function. Example:
 ```
-{:ok, {_, data}} = XK.convert_X2K(xml)
+{:ok, {_, data}} = XKX.convert_X2K(xml)
 xml =
-  XK.set_node(data, [:Bookstore, :Booking, :Other], "wally")
-  |> XK.convert_K2X
+  XKX.set_node(data, [:Bookstore, :Booking, :Other], "wally")
+  |> XKX.convert_K2X
 ```
 You can find the xml result with the modified node here: https://github.com/eloyucu/xkx/blob/master/test/xmls/match/content_set_first_occurrence.xml
 
 `set_node_multiple`: We can have the needed about modify all the ocurrences of a node in a path... but only the first occurrence of the father. Example (using this xml https://github.com/eloyucu/xkx/blob/master/test/xmls/short_content.xml):
 ```
-{:ok, {_, data}} = XK.convert_X2K(xml)
+{:ok, {_, data}} = XKX.convert_X2K(xml)
 xml =
-  XK.set_node_multiple(data, [:Bookstore, :Booking, :Other], "wally")
-  |> XK.convert_K2X
+  XKX.set_node_multiple(data, [:Bookstore, :Booking, :Other], "wally")
+  |> XKX.convert_K2X
 ```
 And the result will be: https://github.com/eloyucu/xkx/blob/master/test/xmls/match/short_content_multiply_other.xml
 
 
 `set_node_multiple_all`: Modifies all ocurrences of a node in the xpath. We are going to use the same xml and xpath than before, in this way, differences between these two similar functions will be easier to see.
 ```
-{:ok, {_, data}} = XK.convert_X2K(xml)
+{:ok, {_, data}} = XKX.convert_X2K(xml)
 xml =
-  XK.set_node_multiple_all(data, [:Bookstore, :Booking, :Other], "wally")
-  |> XK.convert_K2X
+  XKX.set_node_multiple_all(data, [:Bookstore, :Booking, :Other], "wally")
+  |> XKX.convert_K2X
 ```
 And the result will be: https://github.com/eloyucu/xkx/blob/master/test/xmls/match/short_content_multiply_other_all.xml.xml
 
@@ -150,19 +150,19 @@ And the result will be: https://github.com/eloyucu/xkx/blob/master/test/xmls/mat
 1) set_node_attr(xml, nodes, attr, new_value) -> the third argument is the attribute to change the value, and the fourth is the new value.
 2) set_node_attr(xml, nodes, attrs) -> the third argument is a keyword list that will be setted as attributes for the last element of the path (on nodes param).
 In this way we can use:
-`XK.set_node_attr(xml, [:Bookstore], :id, "wally")`
+`XKX.set_node_attr(xml, [:Bookstore], :id, "wally")`
 or alternatively use:
-`XK.set_node_attr(xml, [:Bookstore], [id: "wally"])`
+`XKX.set_node_attr(xml, [:Bookstore], [id: "wally"])`
 The advantage of the second way is that we can set more than one attr with only one invoking to this function:
-`XK.set_node_attr(xml, [:Bookstore], [id: "wally", foo: "bar", other_attr: "value"])`
+`XKX.set_node_attr(xml, [:Bookstore], [id: "wally", foo: "bar", other_attr: "value"])`
 
 `set_attribute_multiple` and `set_attribute_multiple_all` that make the same than _set_node_multiple_ and _set_node_multiple_all_ respectively, but modifying the attributes instead of the nodes.
 
 ## TODO:
 `set_node_by_dependency`, `set_node_multiple_by_dependency` and `set_node_multiple_all_by_dependency` that will allow set a node with a new value but pasing a keyword and set this new value deppending on the old value. Something like (using the simplest xml on the top of this document):
 ```
-{:ok, {_, data}} = XK.convert_X2K(xml)
-value = XK.set_node_by_dependency(data, [:father, :foo], [bar: "ok", other: "no", other_one: "neither"])
+{:ok, {_, data}} = XKX.convert_X2K(xml)
+value = XKX.set_node_by_dependency(data, [:father, :foo], [bar: "ok", other: "no", other_one: "neither"])
 ```
 And the result will be:
 ```

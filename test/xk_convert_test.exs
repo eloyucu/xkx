@@ -1,10 +1,10 @@
 defmodule XKConvertTest do
   use ExUnit.Case
-  doctest XK
+  doctest XKX
 
 
   test "Convert from text" do
-    xml = XK.convert_X2K(TestHelper.get_content())
+    xml = XKX.convert_X2K(TestHelper.get_content())
     assert xml == {:ok, {:Bookstore,
       [Bookstore: [attrs: [id: "BOOKSTORE"],
         value: [Booking: [attrs: [id: "0", class: "terror booking"],
@@ -27,7 +27,7 @@ defmodule XKConvertTest do
            Author: [attrs: [], value: "Mike San Francisco"]]]]]]}}
   end
   test "Convert from text deep" do
-    xml = XK.convert_X2K(TestHelper.get_deep_content())
+    xml = XKX.convert_X2K(TestHelper.get_deep_content())
     assert xml == {:ok, {:Bookstore,
       [Bookstore: [attrs: [],
         value: [Book: [attrs: [id: "3", class: "comedy", seller: "best"],
@@ -40,20 +40,20 @@ defmodule XKConvertTest do
                     value: "ISBN_3"]]]]]]]]]]]]]]}}
   end
   test "Convert from text and after convert_X2K to xml again" do
-    {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_content())
-    xml = XK.convert_K2X(xml)
+    {:ok, {_, xml}} = XKX.convert_X2K(TestHelper.get_content())
+    xml = XKX.convert_K2X(xml)
     {xml, content} = TestHelper.normalize(xml, TestHelper.get_content())
     assert xml == content
   end
   test "Convert from text and after convert_X2K to xml again using namespaces" do
-    {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_content())
-    xml = XK.convert_K2X(xml, [Book: "n:", ISBN: ""])
+    {:ok, {_, xml}} = XKX.convert_X2K(TestHelper.get_content())
+    xml = XKX.convert_K2X(xml, [Book: "n:", ISBN: ""])
     {xml, content} = TestHelper.normalize(xml, TestHelper.get_match("content_with_namespaces"))
     assert xml == content
   end
   test "Convert from deep text and after convert_X2K to xml again" do
-    {:ok, {_, xml}} = XK.convert_X2K(TestHelper.get_deep_content())
-    xml = XK.convert_K2X(xml)
+    {:ok, {_, xml}} = XKX.convert_X2K(TestHelper.get_deep_content())
+    xml = XKX.convert_K2X(xml)
     {xml, content} = TestHelper.normalize(xml, TestHelper.get_deep_content())
     assert xml == content
   end
@@ -73,6 +73,6 @@ defmodule XKConvertTest do
        Booking: [attrs: [id: "2", class: "The_third"],
         value: [International: [attrs: [attr: "I_2"], value: []],
          Other: [attrs: [], value: "something other"]]]]]]
-     xml = data |> XK.convert_K2X
+     xml = data |> XKX.convert_K2X
   end
 end
