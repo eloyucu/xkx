@@ -47,34 +47,37 @@ defmodule XKX do
   end
   def get_node_value_list(xml, [head | tail]), do: XKNodesListGetter.get_node_value_list(xml[head], tail, 0, [])
   @doc """
-  getAttributesValue
+  get_node_attrs
   """
-  # def get_node_attrs(xml, [head | tail], nil), do: node = XKNodesGetter.get_node(xml[head], tail, 0)[:attrs]
-  # def get_node_attrs(xml, [head | tail], attr), do: node = XKNodesGetter.get_node(xml[head], tail, 0)[:attrs][attr]
-  # TODO: move the "attr" as a third parameter in XKAttributesGetter.get_node_attrs and simplify the last function get_node_attrs
   def get_node_attrs(xml, [head | tail], attr), do: XKAttributesGetter.get_node_attrs(xml[head], tail ++ [attr], 0)
-
   @doc """
   create_node
   """
   def create_node(xml, [head | tail], new_value, order, is_list), do: XKNodesCreator.create_node(xml, [head | tail], new_value, order, is_list, 0)
-
-
   @doc """
   set_node
   """
   def set_node(xml, [head | tail], new_value), do: XKNodesSetter.set_node(xml, [head | tail], new_value, 0)
   @doc """
-  set_node
+  set_node_by_dependency
+  """
+  def set_node_by_dependency(xml, [head | tail], new_value), do: XKNodesSetterByDependency.set_node_by_dependency(xml, [head | tail], new_value, 0)
+  @doc """
+  set_node_multiple
   """
   def set_node_multiple(xml, [head | tail], new_value), do: XKNodesMultipleSetter.set_node_multiple(xml, [head | tail], new_value, 0)
   @doc """
+  set_node_multiple_all
   """
   def set_node_multiple_all(xml, [head | tail], new_value), do: XKNodesMultipleSetter.set_node_multiple_all(xml, [head | tail], new_value, 0)
   @doc """
-  create_node
+  set_node_multiple_by_dependency
   """
-  # def create_node(xml, [head | tail], new_value), do: XKNodesCreate.create_node(xml, [head | tail], new_value, 0)
+  def set_node_multiple_by_dependency(xml, [head | tail], new_value), do: XKNodesMultipleSetterByDependency.set_node_multiple_by_dependency(xml, [head | tail], new_value, 0)
+  @doc """
+  set_node_multiple_all_by_dependency
+  """
+  def set_node_multiple_all_by_dependency(xml, [head | tail], new_value), do: XKNodesMultipleSetterByDependency.set_node_multiple_all_by_dependency(xml, [head | tail], new_value, 0)
   @doc """
   set_node_attr
   """
