@@ -57,6 +57,12 @@ defmodule XKX do
   @doc """
   set_node
   """
+  def create_node(xml, [head | tail], new_value, order, is_list), do: XKNodesCreator.create_node(xml, [head | tail], new_value, order, is_list, 0)
+
+
+  @doc """
+  set_node
+  """
   def set_node(xml, [head | tail], new_value), do: XKNodesSetter.set_node(xml, [head | tail], new_value, 0)
   @doc """
   set_node
@@ -84,6 +90,8 @@ defmodule XKX do
   """
   def set_attribute_multiple_all(xml, nodes, attr, new_value), do: XKAttributesMultipleSetter.set_attribute_multiple_all(xml, nodes, attr, new_value, 0) |> filter_output
   def set_attribute_multiple_all(xml, nodes, new_value), do: XKAttributesMultipleSetter.set_attribute_multiple_all(xml, nodes, nil, new_value, 0) |> filter_output
+
+
 
   defp filter_output(data) do
     cond do

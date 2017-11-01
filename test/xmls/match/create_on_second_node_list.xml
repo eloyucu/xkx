@@ -1,0 +1,18 @@
+<Bookstore>
+    <Book id="3" class="comedy" seller="best">
+        <Author>
+            <Other></Other>
+        </Author>
+        <Author>
+            <Name>
+                <Given>
+                    <ISBN type="EU">
+                        <special attr="value">ISBN_3</special>
+                    </ISBN>
+                </Given>
+            </Name>
+        </Author>
+        <Author chapters="2-5-7">Stephan</Author>
+        <Author chapters="1-5-6">new one</Author>
+    </Book>
+</Bookstore>

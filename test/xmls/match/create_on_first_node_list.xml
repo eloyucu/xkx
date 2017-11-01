@@ -1,0 +1,22 @@
+<Bookstore>
+    <Book id="3" class="comedy" seller="best">
+        <Author>
+            <Other></Other>
+        </Author>
+        <Author>
+            <Name>
+                <Given>
+                    <ISBN type="EU">
+                        <special attr="value">ISBN_3</special>
+                    </ISBN>
+                </Given>
+            </Name>
+        </Author>
+    </Book>
+    <Book id="5" class="adventure">
+        <Author>LBA</Author>
+    </Book>
+    <Book id="4" class="terror">
+        <Author>new one</Author>
+    </Book>
+</Bookstore>
